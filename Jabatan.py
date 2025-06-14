@@ -41,6 +41,10 @@ with st.form("form_penilaian"):
 
     st.markdown("### Isikan Penilaian dengan Huruf")
     nilai_komponen = {}
+        for k in KOMPONEN:
+        huruf = st.selectbox(k, options=[], key=k)
+        nilai_komponen[k] = huruf
+
     submitted = st.form_submit_button("💾 Simpan Penilaian")
 
     if submitted and nama_instansi and nama_penilai:
