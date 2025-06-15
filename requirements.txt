@@ -10,3 +10,4 @@ xlsxwriter
 pytz
 yfinance
 matplotlib
+ta
