@@ -8,6 +8,5 @@ graphviz
 openpyxl
 xlsxwriter
 pytz
-matplotlib.pyplot
 yfinance
-ta
+
