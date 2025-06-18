@@ -1,40 +1,37 @@
 import streamlit as st
 from docx import Document
+from docxcompose.composer import Composer
 from io import BytesIO
 
-st.title("📄 Merge Beberapa File Word (.docx) Menjadi Satu")
+st.title("📄 Merge File Word (.docx) — Preserve Format 100%")
 
-st.write("""
-Unggah beberapa file Word yang ingin Anda gabungkan.
-File hasil merge akan bisa diunduh.
-""")
-
-uploaded_files = st.file_uploader("Upload file .docx", type=["docx"], accept_multiple_files=True)
+uploaded_files = st.file_uploader(
+    "Upload beberapa file .docx", 
+    type=["docx"], 
+    accept_multiple_files=True
+)
 
 if uploaded_files:
     if st.button("Gabungkan File"):
-        merged_document = Document()
-
-        for index, uploaded_file in enumerate(uploaded_files):
-            doc = Document(uploaded_file)
-            # Tambahkan setiap paragraf dari file
-            for paragraph in doc.paragraphs:
-                merged_document.add_paragraph(paragraph.text)
-            
-            # Tambahkan page break antar dokumen (opsional)
-            if index < len(uploaded_files) - 1:
-                merged_document.add_page_break()
-
+        # Pakai dokumen pertama sebagai base
+        base_doc = Document(uploaded_files[0])
+        composer = Composer(base_doc)
+        
+        for idx, uploaded_file in enumerate(uploaded_files[1:], start=2):
+            next_doc = Document(uploaded_file)
+            composer.append(next_doc)
+        
         # Simpan ke buffer
         buffer = BytesIO()
-        merged_document.save(buffer)
+        composer.save(buffer)
         buffer.seek(0)
 
-        st.success("File berhasil digabungkan!")
+        st.success("File berhasil digabungkan (format utuh)!")
 
         st.download_button(
-            label="📥 Download File Word Gabungan",
+            label="📥 Download File Gabungan",
             data=buffer,
-            file_name="merged_document.docx",
+            file_name="merged_full_format.docx",
             mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         )
+
