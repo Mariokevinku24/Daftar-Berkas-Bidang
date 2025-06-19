@@ -12,3 +12,4 @@ yfinance
 matplotlib
 ta
 docxcompose
+PyPDF2
